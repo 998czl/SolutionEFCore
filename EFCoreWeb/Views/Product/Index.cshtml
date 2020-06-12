@@ -1,0 +1,81 @@
+﻿@{
+	Layout = null;
+}
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<script src="~/js/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript">
+		function Add() {
+			$.ajax({
+				url: '/Product/AddAsyns',
+				type: 'POST',
+				dataType: "json",
+				data: { Name: "567891011", Category: 8, Price: 80 },
+				success: function (json) {
+					alert(json.msg);
+				},
+				error: function (json) {
+					alert(json.msg);
+				}
+			});
+		}
+
+		function Edit() {
+			$.ajax({
+				url: '/Product/UpdateAsync_Edit',
+				type: 'POST',
+				dataType: "json",
+				data: { Name: "7777777", Category: 90, Price: 90, ID: 7 },
+				success: function (json) {
+					alert(json.msg);
+				},
+				error: function (json) {
+					alert(json.msg);
+				}
+			});
+		}
+
+		function Delete() {
+			$.ajax({
+				url: '/Product/DeleteAsync_Del',
+				type: 'POST',
+				dataType: "json",
+				data: { ID: 12 },
+				success: function (json) {
+					alert(json.msg);
+				},
+				error: function (json) {
+					alert(json.msg);
+				}
+			});
+		}
+
+		function Get() {
+			$.ajax({
+				url: '/Product/GetProductList',
+				type: 'POST',
+				dataType: "json",
+				data: { PageSize: 10, PageIndex: 1},
+				success: function (json) {					
+					alert(json.data);
+				},
+				error: function (json) {
+					alert(json.msg);
+				}
+			});
+		}
+
+	</script>
+</head>
+<body>
+	<input type="button" id="add" onclick="Add()" style="background-color:skyblue; width:75px; height:28px; border:0px; cursor:pointer" value="添加" />
+	<input type="button" id="Edit" onclick="Edit()" style="background-color:skyblue; width:75px; height:28px; border:0px; cursor:pointer" value="编辑" />
+	<input type="button" id="Delete" onclick="Delete()" style="background-color:skyblue; width:75px; height:28px; border:0px; cursor:pointer" value="删除" />
+	<input type="button" id="Get" onclick="Get()" style="background-color:skyblue; width:75px; height:28px; border:0px; cursor:pointer" value="集合" />
+</body>
+</html>
+
+
+	

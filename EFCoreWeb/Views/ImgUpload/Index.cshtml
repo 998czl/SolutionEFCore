@@ -1,0 +1,75 @@
+﻿@{
+	ViewData["Title"] = "Index";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="detail-item">
+	<form action="" enctype="multipart/form-data" id="formData2">
+		<span class="item-tit" style="margin-top: 22px;">头像</span>
+		<ul class="clearfix list-unstyled pic-list">
+			<li>
+				<img id="imgName" ms-attr-src="UserData.Files" style="width: 120px; height: 150px; border-radius: 3px;">
+			</li>
+			<li>
+				<span class="info"><input id="file" class="filepath" onchange="changeImg()" type="file" accept="image/*" /></span>
+				<span class="info"><input type="button" id="uploadbt" onclick="UploadImage()" style="background-color:skyblue; width:75px; height:28px; border:0px; cursor:pointer" value="上传" /></span>
+				<input type="hidden" id="imgPath" ms-duplex="UserData.Files" />
+			</li>
+		</ul>
+	</form>
+</div>
+
+<script type="text/javascript">
+	//图片预览
+	function changeImg() {
+		var newsrc = getObjectURL(document.getElementById('file').files[0]);
+		document.getElementById('imgName').src = newsrc;
+	}
+	//建立一個可存取到該file的url
+	function getObjectURL(file) {
+		var url = null;
+		// 下面函数执行的效果是一样的，只是需要针对不同的浏览器执行不同的 js 函数而已
+		if (window.createObjectURL != undefined) { // basic
+			url = window.createObjectURL(file);
+		} else if (window.URL != undefined) { // mozilla(firefox)
+			url = window.URL.createObjectURL(file);
+		} else if (window.webkitURL != undefined) { // webkit or chrome
+			url = window.webkitURL.createObjectURL(file);
+		}
+		return url;
+	}
+
+	function UploadImage() {
+		var ofile = $("#file").get(0).files[0];
+		var formData = new FormData();
+		if (!ofile) {
+			alert('请上传文件');
+			return;
+		}
+		var size = ofile.size / 1024 / 1024;
+		if (size > 5) {
+			alert('文件不能大于5M');
+			return;
+		}
+		formData.append("files", ofile);//这个是文件，这里只是演示上传了一个文件，如果要上传多个的话将[0]去掉
+		$.ajax({
+			url: '/ImgUpload/UploadImg',
+			type: 'POST',
+			data: formData,
+			contentType: false,
+			processData: false,
+			success: function (msg) {
+				if (msg) {
+					var obj = JSON.parse(msg);
+					if (obj.success) {
+						$("#imgPath").val(obj.sourceUrl);
+					}
+					alert("上传成功");
+				}
+			},
+			error: function (msg) {
+				console.log(msg);
+			}
+		});
+	}
+</script>

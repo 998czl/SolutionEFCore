@@ -20,7 +20,7 @@ namespace EFCoreDAL.Application.Imp
 				{
 					try
 					{						
-						await db.product.AddAsync(product);
+						await db.Products.AddAsync(product);
 						var res = await db.SaveChangesAsync();
 						transaction.Commit();
 						return res > 0 ? true : false;
@@ -28,7 +28,7 @@ namespace EFCoreDAL.Application.Imp
 					catch (Exception ex)
 					{
 						LogHelper.Error("Product=>AddAsyns添加失败", ex);
-						return false;
+						throw ex;
 					}
 				}
 			}
@@ -42,12 +42,12 @@ namespace EFCoreDAL.Application.Imp
 				{
 					try
 					{
-						var model = await db.product.FindAsync(ID);
+						var model = await db.Products.FindAsync(ID);
 						if (model == null)
 						{
 							throw new Exception("数据有误!");
 						}
-						db.product.Remove(model);
+						db.Products.Remove(model);
 						var result = await db.SaveChangesAsync() > 0 ? true : false;
 						transaction.Commit();
 						return result;
@@ -65,10 +65,11 @@ namespace EFCoreDAL.Application.Imp
 		{
 			using (MyDbContext db = new MyDbContext(options))
 			{
-				var list = await db.product.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+				var list = await db.Products.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
 				return list;
 			}
 		}
+
 		public async Task<bool> UpdateAsync(Product product, DbContextOptions options)
 		{
 			using (MyDbContext db = new MyDbContext(options))
@@ -77,7 +78,7 @@ namespace EFCoreDAL.Application.Imp
 				{
 					try
 					{
-						var model = await db.product.FindAsync(product.ID);
+						var model = await db.Products.FindAsync(product.ID);
 						if (model != null)
 						{
 							model.Name = product.Name;

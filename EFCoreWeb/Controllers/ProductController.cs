@@ -26,20 +26,27 @@ namespace EFCoreWeb.Controllers
 									
 		public async Task<string> AddAsyns(ProductModel model)
 		{
-			var _service = Container.Instance.Resolve<IProductService>();
-			Product product = new Product()
+			try
 			{
-				Name = model.Name,
-				Category = model.Category,
-				Price = model.Price,
-				Guid = Guid.NewGuid()
-			};
-			var res = await _service.AddAsyns(product, _options);
-			if (res)
-			{
-				return Success("添加成功");
+				var _service = Container.Instance.Resolve<IProductService>();
+				Product product = new Product()
+				{
+					Name = model.Name,
+					Category = model.Category,
+					Price = model.Price,
+					Guid = Guid.NewGuid()
+				};
+				var res = await _service.AddAsyns(product, _options);
+				if (res)
+				{
+					return Success("添加成功");
+				}
+				return Error("添加失败");
 			}
-			return Error("添加失败");
+			catch (Exception ex)
+			{
+				return Error(ex.Message);
+			}			
 		}
 
 		public async Task<string> DeleteAsync_Del(ProductModel model)

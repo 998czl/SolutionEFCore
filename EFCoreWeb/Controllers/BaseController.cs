@@ -4,11 +4,30 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using EFCoreCommon;
+using EFCoreDAL.Model;
+using Microsoft.AspNetCore.Http;
+using WebCore_Entity.RedisManager;
+using EFCoreDAL.Dto;
 
 namespace EFCoreWeb.Controllers
 {
 	public class BaseController : Controller
 	{
+
+		public IHttpContextAccessor _accessor;
+
+		public RedisSession RedisSession => new RedisSession(_accessor.HttpContext);
+
+		protected AdminDto CurrentUser
+		{
+			get
+			{
+				RedisSession.SetExpire("ADMINUSER", 60);
+				return RedisSession.Get<AdminDto>("ADMINUSER");
+			}
+			set { RedisSession.Add("ADMINUSER", value); }
+		}
+	
 		protected string Success()
 		{
 			return new { code = 1 }.ToJson();
@@ -23,7 +42,7 @@ namespace EFCoreWeb.Controllers
 		//成功执行返回
 		protected string Success(object data)
 		{
-			return new { code = 1, data = data }.ToJson();
+			return new { code = 1, data = data, msg ="获取数据成功" }.ToJson();
 		}
 
 		//成功执行返回

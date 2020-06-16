@@ -28,6 +28,12 @@ namespace EFCoreDAL
 			  .EnableInterfaceInterceptors()
 			  .InterceptedBy(typeof(ExeceptionInterceptor))
 			  .As<IProductService>();
+
+			builder.RegisterType<AdminService>()
+			  .EnableInterfaceInterceptors()
+			  .InterceptedBy(typeof(ExeceptionInterceptor))
+			  .As<IAdminService>();
+
 			#endregion
 
 			container = builder.Build();

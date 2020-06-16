@@ -1,0 +1,23 @@
+﻿@{
+	ViewData["Title"] = "Index";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<input type="button" id="Login" onclick="Login()" style="background-color:skyblue; width:75px; height:28px; border:0px; cursor:pointer" value="登录" />
+<script type="text/javascript">
+	function Login() {
+		$.ajax({
+			url: '/Admin/Login',
+			type: 'POST',
+			dataType: "json",
+			data: { mobile: "18714824271", password: "123456"},
+			success: function (json) {
+				debugger;
+				alert(json.msg);
+			},
+			error: function (json) {
+				alert(json.msg);
+			}
+		});
+	}
+</script>

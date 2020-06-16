@@ -10,6 +10,8 @@ namespace EFCoreDAL
 	{
 		public MyDbContext(DbContextOptions options) : base(options) { }
 
-		public DbSet<Product> product { get; set; }
+		public DbSet<Product> Products { get; set; }
+
+		public DbSet<Administrator> administrator { get; set; }
 	}
 }
